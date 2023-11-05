@@ -16,19 +16,16 @@ const GameBoard = () => {
 
   // Function to start the timer
   const startTimer = () => {
-    setStartTime(Date.now() - elapsedTime);
+    setStartTime(Date.now());
     setIsTimerRunning(true);
-  };
-
-  // Function to reset the timer
-  const resetTimer = () => {
-    setStartTime(null);
-    setElapsedTime(0);
   };
 
   // Handle starting a new game
   const newGame = () => {
-    resetTimer();
+    // Function to reset the timer
+    setStartTime(null);
+    setElapsedTime(0);
+    
     setTimeout(() => {
       const randomOrderArray = Data.sort(() => 0.5 - Math.random());
       setCardsArray(randomOrderArray);
@@ -42,7 +39,6 @@ const GameBoard = () => {
 
   //this function helps in storing the firstCard and secondCard value
   const handleSelectedCards = (item) => {
-    console.log(typeof item);
     if (firstCard !== null && firstCard.id !== item.id) {
       setSecondCard(item);
     } else {
