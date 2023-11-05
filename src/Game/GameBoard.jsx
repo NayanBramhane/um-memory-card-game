@@ -10,9 +10,25 @@ const GameBoard = () => {
   const [secondCard, setSecondCard] = useState(null);
   const [stopFlip, setStopFlip] = useState(false);
   const [won, setWon] = useState(0);
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
-  //this function start new Game
+  // Function to start the timer
+  const startTimer = () => {
+    setStartTime(Date.now() - elapsedTime);
+    setIsTimerRunning(true);
+  };
+
+  // Function to reset the timer
+  const resetTimer = () => {
+    setStartTime(null);
+    setElapsedTime(0);
+  };
+
+  // Handle starting a new game
   const newGame = () => {
+    resetTimer();
     setTimeout(() => {
       const randomOrderArray = Data.sort(() => 0.5 - Math.random());
       setCardsArray(randomOrderArray);
@@ -20,6 +36,7 @@ const GameBoard = () => {
       setFirstCard(null);
       setSecondCard(null);
       setWon(0);
+      startTimer(); // Start the timer when a new game begins
     }, 1300);
   };
 
@@ -61,12 +78,24 @@ const GameBoard = () => {
 
   //after the slected images have been checked for
   //equivalency we empty the firstCard and secondCard component
-  function removeSelection() {
+  const removeSelection = () => {
     setFirstCard(null);
     setSecondCard(null);
     setStopFlip(false);
     setMoves((prevValue) => prevValue + 1);
-  }
+  };
+
+  // Effect to update the elapsed time
+  useEffect(() => {
+    if (isTimerRunning && won !== 6) {
+      // Check if the game is not won
+      const interval = setInterval(() => {
+        setElapsedTime(Date.now() - startTime);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isTimerRunning, startTime, won]);
 
   //starts the game for the first time.
   useEffect(() => {
@@ -99,10 +128,13 @@ const GameBoard = () => {
       </div>
 
       {won !== 6 ? (
-        <div className="comments">Moves : {moves}</div>
+        <div className="comments">
+          Moves: {moves} | Time: {Math.floor(elapsedTime / 1000)} seconds
+        </div>
       ) : (
         <div className="comments">
-          Congratulations! You Won in {moves} moves.
+          Congratulations! You Won in {moves} moves and{" "}
+          {Math.floor(elapsedTime / 1000)} seconds.
         </div>
       )}
       <button className="button" onClick={newGame}>
