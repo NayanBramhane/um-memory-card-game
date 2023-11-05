@@ -1,4 +1,3 @@
 # Memory Card Game
 
-This a memory card game.
-
+The game is a classic memory-testing game where players need to match pairs of cards.
