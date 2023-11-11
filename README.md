@@ -16,7 +16,7 @@ The game is a classic memory-testing game where players need to match pairs of c
 
 ```shell
 git clone https://github.com/NayanBramhane/um-memory-card-game.git
-cd memory-card-game
+cd um-memory-card-game
 npm install
 npm start
 ```
